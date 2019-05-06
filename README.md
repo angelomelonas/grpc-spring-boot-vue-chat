@@ -1,7 +1,7 @@
-##Requirements
+## Requirements
 
 ##### Docker
-Install Docker for Windows
+Install Docker
 
 ##### Protoc
 1. Go to [the releases page](https://github.com/protocolbuffers/protobuf/releases)  of [Protobuf](https://github.com/protocolbuffers/protobuf)
@@ -36,7 +36,7 @@ For Unix:
     $ docker build -t helloworld/envoy -f ./envoy.Dockerfile .
     $ docker run -d -p 8080:8080 --network=host helloworld/envoy
     
-NOTE: This project is configured for Windows by default. To run Envoy on Unix, change the following line in the `envoy.yaml` file 
+**NOTE**: This project is configured for Windows by default. To run Envoy on Unix, change the following line in the `envoy.yaml` file 
 
     hosts: [{ socket_address: { address: host.docker.internal, port_value: 9090 }}]
 to 
@@ -46,3 +46,9 @@ to
 See [here](https://github.com/grpc/grpc-web/issues/436) for more details regarding this change.
 
 #### Vue Frontend
+
+// TODO: Generate the proto buffs for the frontend using
+
+    $ protoc -I=. helloworld.proto \
+      --js_out=import_style=commonjs:. \
+      --grpc-web_out=import_style=commonjs,mode=grpcwebtext:.
