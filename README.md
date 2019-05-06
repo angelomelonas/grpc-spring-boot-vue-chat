@@ -36,7 +36,8 @@ For Unix:
     $ docker build -t helloworld/envoy -f ./envoy.Dockerfile .
     $ docker run -d -p 8080:8080 --network=host helloworld/envoy
     
-**NOTE**: This project is configured for Windows by default. To run Envoy on Unix, change the following line in the `envoy.yaml` file 
+#### Note
+This project is configured for Windows by default. To run Envoy on Unix, change the following line in the `envoy.yaml` file 
 
     hosts: [{ socket_address: { address: host.docker.internal, port_value: 9090 }}]
 to 
