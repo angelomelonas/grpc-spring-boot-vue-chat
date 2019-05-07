@@ -1,3 +1,6 @@
+# gRPC-Web Chat
+A very simple Hello World gRPC (and gRPC-Web) proof of concept project using Spring Boot, Vue.js and EnvoyProxy. 
+
 ## Requirements
 
 ##### Docker

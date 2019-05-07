@@ -1,11 +1,11 @@
-package com.angelomelonas.helloworld;
+package com.angelomelonas.grpcwebchat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HelloWorldApplication {
+public class ChatApplication {
     public static void main(String[] args) {
-        SpringApplication.run(HelloWorldApplication.class, args);
+        SpringApplication.run(ChatApplication.class, args);
     }
 }

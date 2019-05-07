@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "proto": "mkdirp proto && protoc --proto_path=../proto helloworld.proto --js_out=import_style=typescript:proto/ --grpc-web_out=import_style=typescript,mode=grpcwebtext:proto/"
+    "proto": "mkdirp proto && protoc --proto_path=../proto chat.proto --js_out=import_style=typescript:proto/ --grpc-web_out=import_style=typescript,mode=grpcwebtext:proto/"
   },
   "dependencies": {
     "core-js": "^2.6.5",
