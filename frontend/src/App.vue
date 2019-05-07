@@ -1,33 +1,37 @@
 <template>
-    <div id="app">
-        <img alt="Vue logo" src="./assets/logo.png"/>
-        <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-    </div>
+    <v-app>
+        <v-toolbar dark class="primary" app dense flat clipped-left>
+            <v-toolbar-title> gRPC CHAT</v-toolbar-title>
+            <v-toolbar-items class="hidden-xs-only">
+            </v-toolbar-items>
+        </v-toolbar>
+
+        <v-content fluid>
+            <v-container>
+                <chat-box></chat-box>
+                <v-divider></v-divider>
+                <type-box></type-box>
+            </v-container>
+        </v-content>
+    </v-app>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator";
-    import HelloWorld from "./components/HelloWorld.vue";
+    import ChatBox from "@/components/ChatBox.vue";
+    import TypeBox from "@/components/TypeBox.vue";
 
     @Component({
-        name: "Name",
-        components: {
-            HelloWorld
-        },
-        data: {},
-        methods: {}
+        name: "App",
+        components: {ChatBox, TypeBox},
     })
     export default class App extends Vue {
     }
 </script>
 
 <style>
-    #app {
-        font-family: "Avenir", Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 60px;
+    /* Styles here will be globally applied. */
+    html {
+        overflow-y: hidden !important;
     }
 </style>
