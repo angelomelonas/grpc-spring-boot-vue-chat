@@ -46,6 +46,16 @@
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
+                    <!-- Generate proto files -->
+                    <execution>
+                        <id>npm run proto</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run proto</arguments>
+                        </configuration>
+                    </execution>
                     <!-- Build and minify static files -->
                     <execution>
                         <id>npm run build</id>
