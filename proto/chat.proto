@@ -4,26 +4,27 @@ package grpcwebchat;
 option java_package = "com.angelomelonas.grpcwebchat";
 
 service Chat {
-  // unary call
-  rpc SendMessage (ClientMessage) returns (SendMessageResponse);
+    // Unary call
+    rpc SendMessage (MessageRequest) returns (SendMessageResponse);
 
-  // server streaming call
-  rpc GetMessages (MessagesRequest) returns (stream ServerMessage);
+    // Server streaming call
+    rpc GetMessages (GetMessagesRequest) returns (stream Message);
 }
 
-message ClientMessage {
-  string message = 1;
-  string username = 2;
+message Message {
+    string message = 1;
+    string username = 2;
+    int64 timestamp = 3;
 }
 
-message ServerMessage {
-  string message = 1;
-  string username = 2;
-  int64 timestamp = 3;
+message MessageRequest {
+    string message = 1;
+    string username = 2;
 }
 
-message MessagesRequest {
-  string username = 1;
+message SendMessageResponse {
 }
 
-message SendMessageResponse {}
+message GetMessagesRequest {
+
+}
