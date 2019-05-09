@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package grpcwebchat;
+option java_package = "com.angelomelonas.grpcwebchat";
+
+service Chat {
+    // Unary call
+    rpc SendMessage (MessageRequest) returns (Message);
+
+    // Server streaming call
+    rpc GetMessages (MessagesRequest) returns (stream Message);
+}
+
+message Message {
+    string message = 1;
+    string username = 2;
+    int64 timestamp = 3;
+}
+
+message MessageRequest {
+    string message = 1;
+    string username = 2;
+}
+
+message MessagesRequest {
+}

@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.angelomelonas</groupId>
-        <artifactId>grpcwebhelloworld</artifactId>
+        <artifactId>grpcwebchat</artifactId>
         <version>0.0.1</version>
     </parent>
 
@@ -44,6 +44,16 @@
                         <!-- Optional configuration which provides for running any npm command -->
                         <configuration>
                             <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <!-- Generate proto files -->
+                    <execution>
+                        <id>npm run proto</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run proto</arguments>
                         </configuration>
                     </execution>
                     <!-- Build and minify static files -->

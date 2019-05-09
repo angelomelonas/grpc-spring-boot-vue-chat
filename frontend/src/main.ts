@@ -4,7 +4,6 @@ import Vuetify from "vuetify";
 import "@/stylus/main.styl";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 
-
 Vue.config.productionTip = false;
 Vue.use(Vuetify, {
   theme: {
@@ -14,7 +13,7 @@ Vue.use(Vuetify, {
     success: "#a5d6a7",
     info: "#eceff1",
     warning: "#ffd699",
-    error: "#ffab91",
+    error: "#ffab91"
   }
 });
 new Vue({
