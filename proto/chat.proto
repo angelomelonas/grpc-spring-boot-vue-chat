@@ -5,10 +5,10 @@ option java_package = "com.angelomelonas.grpcwebchat";
 
 service Chat {
     // Unary call
-    rpc SendMessage (MessageRequest) returns (SendMessageResponse);
+    rpc SendMessage (MessageRequest) returns (Message);
 
     // Server streaming call
-    rpc GetMessages (GetMessagesRequest) returns (stream Message);
+    rpc GetMessages (MessagesRequest) returns (stream Message);
 }
 
 message Message {
@@ -22,9 +22,5 @@ message MessageRequest {
     string username = 2;
 }
 
-message SendMessageResponse {
-}
-
-message GetMessagesRequest {
-
+message MessagesRequest {
 }

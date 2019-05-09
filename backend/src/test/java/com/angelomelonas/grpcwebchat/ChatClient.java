@@ -1,24 +1,20 @@
-package com.angelomelonas.grpcwebchat.grpc;
+package com.angelomelonas.grpcwebchat;
 
-import com.angelomelonas.grpcwebchat.ChatGrpc;
-import com.angelomelonas.grpcwebchat.ChatOuterClass.GetMessagesRequest;
 import com.angelomelonas.grpcwebchat.ChatOuterClass.Message;
 import com.angelomelonas.grpcwebchat.ChatOuterClass.MessageRequest;
-import com.angelomelonas.grpcwebchat.ChatOuterClass.SendMessageResponse;
+import com.angelomelonas.grpcwebchat.ChatOuterClass.MessagesRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+// This class is only for testing purposes.
 @Component
 public class ChatClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChatClient.class);
 
     private ChatGrpc.ChatBlockingStub chatBlockingStub;
 
@@ -28,25 +24,19 @@ public class ChatClient {
         chatBlockingStub = ChatGrpc.newBlockingStub(managedChannel);
     }
 
-    public String sendMessage(String username, String message) {
+    public Message sendMessage(String username, String message) {
         MessageRequest newMessage = MessageRequest.newBuilder().setUsername(username).setMessage(message).build();
+        Message response = chatBlockingStub.sendMessage(newMessage);
 
-        SendMessageResponse response = chatBlockingStub.sendMessage(newMessage);
-
-        // TODO:
-        return "OK";
+        return response;
     }
 
     public ArrayList<String> getMessages() {
-        GetMessagesRequest getMessagesRequest = GetMessagesRequest.newBuilder().build();
-
-        Iterator<Message> messages = chatBlockingStub.getMessages(getMessagesRequest);
-
         ArrayList<String> messagesList = new ArrayList<>();
 
+        Iterator<Message> messages = chatBlockingStub.getMessages(MessagesRequest.newBuilder().build());
         messages.forEachRemaining(message -> messagesList.add(message.getMessage()));
 
         return messagesList;
     }
-
 }

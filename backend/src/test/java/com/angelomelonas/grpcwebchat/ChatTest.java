@@ -1,7 +1,7 @@
 package com.angelomelonas.grpcwebchat;
 
+import com.angelomelonas.grpcwebchat.ChatOuterClass.Message;
 import com.angelomelonas.grpcwebchat.ChatOuterClass.MessageRequest;
-import com.angelomelonas.grpcwebchat.grpc.ChatClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,12 @@ public class ChatTest {
 
     @Test
     public void testSendMessage() {
-        assertThat(chatClient.sendMessage("John", "Hello, world!")).isEqualTo("OK");
+        MessageRequest messageRequest = generateRandomMessageRequest();
+
+        Message message = chatClient.sendMessage(messageRequest.getUsername(), messageRequest.getMessage());
+
+        assertThat(message.getMessage()).isEqualTo(messageRequest.getMessage());
+        assertThat(message.getUsername()).isEqualTo(messageRequest.getUsername());
     }
 
     @Test
@@ -42,5 +47,4 @@ public class ChatTest {
         String message = UUID.randomUUID().toString();
         return MessageRequest.newBuilder().setUsername(username).setMessage(message).build();
     }
-
 }
