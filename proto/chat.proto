@@ -23,4 +23,5 @@ message MessageRequest {
 }
 
 message MessagesRequest {
+    string username = 1;
 }
