@@ -20,8 +20,8 @@ public class ChatClient {
 
     @PostConstruct
     private void init() {
-        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 9090).usePlaintext().build();
-        chatBlockingStub = ChatGrpc.newBlockingStub(managedChannel);
+            ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 9090).usePlaintext().build();
+            chatBlockingStub = ChatGrpc.newBlockingStub(managedChannel);
     }
 
     public Message sendMessage(String username, String message) {
