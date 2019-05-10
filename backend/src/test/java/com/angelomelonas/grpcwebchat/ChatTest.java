@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,18 +27,6 @@ public class ChatTest {
 
         assertThat(message.getMessage()).isEqualTo(messageRequest.getMessage());
         assertThat(message.getUsername()).isEqualTo(messageRequest.getUsername());
-    }
-
-    @Test
-    public void getMessages() {
-        ArrayList<String> messages = new ArrayList<>();
-
-        for (int i = 0; i < 50; i++) {
-            messages.add(generateRandomMessageRequest().getMessage());
-            chatClient.sendMessage(generateRandomMessageRequest().getUsername(), generateRandomMessageRequest().getMessage());
-        }
-
-        assertThat(chatClient.getMessages().containsAll(messages));
     }
 
     private MessageRequest generateRandomMessageRequest() {
