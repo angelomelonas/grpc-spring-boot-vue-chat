@@ -4,11 +4,13 @@ package grpcwebchat;
 option java_package = "com.angelomelonas.grpcwebchat";
 
 service Chat {
-    // Unary call
+    // Server streaming call
+    rpc Subscribe (SubscriptionRequest) returns (stream Message);
+
+    // Unary calls
     rpc SendMessage (MessageRequest) returns (Message);
 
-    // Server streaming call
-    rpc GetMessages (MessagesRequest) returns (stream Message);
+    rpc Unsubscribe (UnsubscriptionRequest) returns (Message);
 }
 
 message Message {
@@ -22,6 +24,10 @@ message MessageRequest {
     string username = 2;
 }
 
-message MessagesRequest {
+message SubscriptionRequest {
+    string username = 1;
+}
+
+message UnsubscriptionRequest {
     string username = 1;
 }
