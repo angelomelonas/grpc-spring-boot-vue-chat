@@ -3,7 +3,8 @@ package com.angelomelonas.grpcwebchat.grpc;
 import com.angelomelonas.grpcwebchat.ChatGrpc;
 import com.angelomelonas.grpcwebchat.ChatOuterClass.Message;
 import com.angelomelonas.grpcwebchat.ChatOuterClass.MessageRequest;
-import com.angelomelonas.grpcwebchat.ChatOuterClass.MessagesRequest;
+import com.angelomelonas.grpcwebchat.ChatOuterClass.SubscriptionRequest;
+import com.angelomelonas.grpcwebchat.ChatOuterClass.UnsubscriptionRequest;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
@@ -17,9 +18,7 @@ public class ChatImpl extends ChatGrpc.ChatImplBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChatImpl.class);
 
-    private Long idCounter = 0L;
-
-    private HashMap<Long, StreamObserver<Message>> streamObserverMap = new HashMap<>();
+    private HashMap<String, StreamObserver<Message>> connectedUsers = new HashMap<>();
 
     @Override
     public void sendMessage(MessageRequest request, StreamObserver<Message> responseObserver) {
@@ -31,30 +30,96 @@ public class ChatImpl extends ChatGrpc.ChatImplBase {
         Long timestamp = Instant.now().toEpochMilli();
 
         // Create a new message.
-        Message message = Message.newBuilder().setMessage(receivedMessage).setUsername(username).setTimestamp(timestamp).build();
+        Message message = Message.newBuilder()
+                .setMessage(receivedMessage)
+                .setUsername(username)
+                .setTimestamp(timestamp)
+                .build();
 
         // Respond to the client who sent the message.
         responseObserver.onNext(message);
 
         // Forward message to all clients.
-        streamObserverMap.forEach((id, subscribedObserver) -> subscribedObserver.onNext(message));
+        connectedUsers.forEach((user, subscribedObserver) -> {
+            try {
+                subscribedObserver.onNext(message);
+            } catch (Exception e) {
+                // TODO: If the client is no longer connected, remove the user.
+            }
+        });
 
         responseObserver.onCompleted();
     }
 
     @Override
-    public void getMessages(MessagesRequest request, StreamObserver<Message> responseObserver) {
-        LOGGER.info("Client requested messages {}", request);
-
-        String username = "Server";
+    public void subscribe(SubscriptionRequest request, StreamObserver<Message> responseObserver) {
+        String username = request.getUsername();
         Long timestamp = Instant.now().toEpochMilli();
 
-        String welcomeMessage = "Welcome to gRPC Chat!";
-        Message serverMessage = Message.newBuilder().setMessage(welcomeMessage).setUsername(username).setTimestamp(timestamp).build();
+        if (connectedUsers.containsKey(username)) {
+            // TODO: Introduce an Error protocol buffer.
+            LOGGER.warn("Error: Username '{}' has already been taken.", username);
 
-        responseObserver.onNext(serverMessage);
+            Message serverErrorMessage = Message
+                    .newBuilder()
+                    .setMessage("Error: Username '" + username + "' has already been taken.")
+                    .setUsername("Server")
+                    .setTimestamp(timestamp)
+                    .build();
 
-        // Store this client's StreamObserver.
-        streamObserverMap.put(idCounter++, responseObserver);
+            responseObserver.onNext(serverErrorMessage);
+            responseObserver.onCompleted();
+        } else {
+
+            Message serverSuccessMessage = Message
+                    .newBuilder()
+                    .setMessage("Welcome to gRPC Chat, " + username + "!")
+                    .setUsername("Server")
+                    .setTimestamp(timestamp)
+                    .build();
+
+            responseObserver.onNext(serverSuccessMessage);
+
+            // TODO: User a token instead of the username.
+            // Store this client's StreamObserver.
+            connectedUsers.put(username, responseObserver);
+
+            LOGGER.info("Client with Username {} has subscribed.", request.getUsername());
+        }
+    }
+
+    @Override
+    public void unsubscribe(UnsubscriptionRequest request, StreamObserver<Message> responseObserver) {
+        String username = request.getUsername();
+        Long timestamp = Instant.now().toEpochMilli();
+
+        StreamObserver<Message> streamObserver = connectedUsers.get(username);
+
+        if (streamObserver != null) {
+
+            Message serverUnsubscribeMessage = Message
+                    .newBuilder()
+                    .setMessage("You have unsubscribed from gRPC Chat.")
+                    .setUsername("Server")
+                    .setTimestamp(timestamp)
+                    .build();
+
+            responseObserver.onNext(serverUnsubscribeMessage);
+            responseObserver.onCompleted();
+
+            // When a Client has unsubscribed, close the connection.
+            try {
+                streamObserver.onCompleted();
+            } catch (Exception e) {
+                // StreamObserver already closed.
+            }
+
+            // Remove this client's StreamObserver.
+            connectedUsers.remove(username);
+
+            LOGGER.info("Client with username {} has been unsubscribed.", username);
+        } else {
+            LOGGER.warn("Client with username {} does not exist or has already unsubscribed.", username);
+        }
     }
 }

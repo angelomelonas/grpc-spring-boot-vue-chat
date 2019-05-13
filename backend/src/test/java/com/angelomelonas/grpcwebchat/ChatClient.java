@@ -2,14 +2,11 @@ package com.angelomelonas.grpcwebchat;
 
 import com.angelomelonas.grpcwebchat.ChatOuterClass.Message;
 import com.angelomelonas.grpcwebchat.ChatOuterClass.MessageRequest;
-import com.angelomelonas.grpcwebchat.ChatOuterClass.MessagesRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 // This class is only for testing purposes.
 @Component
@@ -20,8 +17,8 @@ public class ChatClient {
 
     @PostConstruct
     private void init() {
-            ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 9090).usePlaintext().build();
-            chatBlockingStub = ChatGrpc.newBlockingStub(managedChannel);
+        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 9090).usePlaintext().build();
+        chatBlockingStub = ChatGrpc.newBlockingStub(managedChannel);
     }
 
     public Message sendMessage(String username, String message) {
@@ -31,12 +28,13 @@ public class ChatClient {
         return response;
     }
 
-    public ArrayList<String> getMessages() {
-        ArrayList<String> messagesList = new ArrayList<>();
-
-        Iterator<Message> messages = chatBlockingStub.getMessages(MessagesRequest.newBuilder().build());
-        messages.forEachRemaining(message -> messagesList.add(message.getMessage()));
-
-        return messagesList;
-    }
+    // TODO AM:
+//    public ArrayList<String> getMessages() {
+//        ArrayList<String> messagesList = new ArrayList<>();
+//
+//        Iterator<Message> messages = chatBlockingStub.getMessages(MessagesRequest.newBuilder().build());
+//        messages.forEachRemaining(message -> messagesList.add(message.getMessage()));
+//
+//        return messagesList;
+//    }
 }

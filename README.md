@@ -20,11 +20,11 @@ Install Docker
 
 ## Install and Run
 
-##### gRPC-Web Hello World
-Run `mvn clean install` to build and compile the project. This will generate all the necessary Protocol Buffer files for the backend.
+##### gRPC-Web Chat
+Run `mvn clean install` to build and compile the project. This will also generate all the necessary Protocol Buffer files for the backend.
 
 #### Spring Boot Backend
-Simply run the `HellowWorldApplication.java` as a normal Java application. This will start the server. See the `resources/application.properties` file for server details.
+Simply run the `ChatApplication.java` as a normal Java application. This will start the server. See the `resources/application.properties` file for server details.
 
 #### Envoy Proxy
 To build and run the Docker container, follow the instructions below. 
@@ -56,3 +56,21 @@ See [here](https://github.com/grpc/grpc-web/issues/436) for more details regardi
     $ protoc -I=. helloworld.proto \
       --js_out=import_style=commonjs:. \
       --grpc-web_out=import_style=commonjs,mode=grpcwebtext:.
+// TODO
+## References and Resources
+    https://medium.com/@aravindhanjay/a-todo-app-using-grpc-web-and-vue-js-4e0c18461a3e
+    https://www.youtube.com/watch?v=RtyKEDZipsM
+    https://github.com/grpc/grpc-web/issues/347
+    https://grpc.io/blog/grpc-web-ga/
+    https://blog.envoyproxy.io/envoy-and-grpc-web-a-fresh-new-alternative-to-rest-6504ce7eb880
+    https://piotrminkowski.wordpress.com/2017/10/25/envoy-proxy-with-microservices/
+    https://codenotfound.com/grpc-java-example.html
+    https://improbable.io/blog/grpc-web-moving-past-restjson-towards-type-safe-web-apis
+    https://grpc.io/docs/quickstart/java/
+    https://github.com/grpc/grpc-web/issues/436
+    https://developers.google.com/protocol-buffers/docs/proto3
+    https://github.com/rodaine/grpc-chat/blob/master/protos/chat.proto
+    https://github.com/saturnism/grpc-java-by-example
+    https://github.com/grpc/grpc-java/blob/master/examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java
+    https://github.com/gluons/vuex-typescript-example
+    https://medium.com/@koonradstraszewski/using-fully-typed-vuex-mutations-with-vuex-typescript-7597f56eceec
