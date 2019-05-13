@@ -1,77 +1,55 @@
 <template>
-  <v-container pa-2>
-    <v-text-field
-      label="Username"
-      placeholder="Your username here..."
-      outline
-      prepend-icon="account_circle"
-      v-model="username"
-    ></v-text-field>
+    <v-container pa-2>
+        <v-layout align-center justify-center row fill-height>
 
-    <v-textarea
-      outline
-      no-resize
-      single-line
-      flat
-      autofocus
-      height="96"
-      counter="512"
-      maxlength="512"
-      label="Type message here..."
-      v-model="message"
-    ></v-textarea>
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn
-        color="primary"
-        @click="sendMessage()"
-        :disabled="message.length < 1"
-        >Send</v-btn
-      >
-    </v-card-actions>
-  </v-container>
+            <v-flex xs12>
+                <v-textarea
+                        outline
+                        no-resize
+                        single-line
+                        flat
+                        autofocus
+                        height="96"
+                        counter="512"
+                        maxlength="512"
+                        label="Type message here..."
+                        v-model="message"
+                        @keydown.enter.exact.prevent
+                        @keyup.enter.exact="sendMessage(message); clearMessage()"
+                        :disabled="!isSubscribed"
+                ></v-textarea>
+            </v-flex>
+
+            <v-flex align-self-start>
+                <v-spacer></v-spacer>
+                <v-btn
+                        color="primary"
+                        @click="sendMessage(message); clearMessage()"
+                        :disabled="!isSubscribed || message.length < 1"
+                        large
+                >Send
+                </v-btn>
+            </v-flex>
+
+        </v-layout>
+    </v-container>
+
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import * as grpcWeb from "grpc-web";
-import { ChatClient } from "../../proto/chat_grpc_web_pb";
-import { MessageRequest } from "../../proto/chat_pb";
-import { Message } from "google-protobuf";
+    import {Component} from "vue-property-decorator";
+    import ChatParent from "@/components/ChatParent.ts";
 
-@Component({
-  name: "TypeBox",
-  watch: {
-    username(username) {
-      localStorage.username = JSON.stringify(username);
+    @Component({
+        name: "TypeBox",
+    })
+    export default class TypeBox extends ChatParent {
+        private message: string = "";
+
+        clearMessage(): void {
+            this.message = "";
+        }
     }
-  }
-})
-export default class TypeBox extends Vue {
-  @Prop({ type: ChatClient, required: true })
-  chatClient!: ChatClient;
-
-  message: string = "";
-  username: string = "";
-
-  sendMessage() {
-    const messageRequest = new MessageRequest();
-
-    messageRequest.setUsername(this.username);
-    messageRequest.setMessage(this.message);
-
-    this.chatClient.sendMessage(
-      messageRequest,
-      {},
-      (err: grpcWeb.Error, message: Message) => {
-          // Log errors or messages here.
-      }
-    );
-
-    // Reset the message.
-    this.message = "";
-  }
-}
 </script>
 
 <style></style>

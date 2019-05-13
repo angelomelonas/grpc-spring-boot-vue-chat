@@ -1,52 +1,29 @@
 <template>
-  <v-container pa-2>
-    <v-textarea
-      outline
-      hide-details
-      clearable
-      no-resize
-      single-line
-      flat
-      height="480"
-      name="input-7-4"
-      readonly
-      v-model="messages"
-    ></v-textarea>
-  </v-container>
+    <v-container pa-2>
+        <v-textarea
+                outline
+                hide-details
+                clearable
+                no-resize
+                single-line
+                flat
+                height="480"
+                name="input-7-4"
+                readonly
+                v-model="messages"
+        ></v-textarea>
+    </v-container>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import { MessagesRequest } from "../../proto/chat_pb";
-import { ChatClient } from "../../proto/chat_grpc_web_pb";
+    import {Component} from "vue-property-decorator";
+    import ChatParent from "@/components/ChatParent";
 
-@Component({
-  name: "ChatBox"
-})
-export default class TypeBox extends Vue {
-  @Prop({ type: ChatClient, required: true })
-  chatClient!: ChatClient;
-
-  messages: string = "";
-
-  mounted() {
-    const getMessagesRequest = new MessagesRequest();
-    getMessagesRequest.setUsername("Anonymous");
-
-    const client = this.chatClient.getMessages(getMessagesRequest, {});
-
-    client.on("data", data => {
-      this.messages +=
-        "[" +
-        new Date(data.getTimestamp()).toISOString() +
-        "] " +
-        data.getUsername() +
-        ": " +
-        data.getMessage() +
-        "\n";
-    });
-  }
-}
+    @Component({
+        name: "ChatBox"
+    })
+    export default class TypeBox extends ChatParent {
+    }
 </script>
 
 <style></style>
