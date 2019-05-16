@@ -67,13 +67,13 @@ class ChatModule extends VuexModule {
   }
 
   @Action
-  connectClient(host: string) {
-    this.chatClient = new ChatClient(host, null, null);
+  connectClient(payload : {hostname: string, port: number}) {
+    this.chatClient = new ChatClient("http://" + payload.hostname + ":" + payload.port, null, null);
     console.log("Client connected.");
   }
 
   @Action
-  async subscribe() {
+  subscribe() {
     console.log("User has subscribed: " + this.username);
 
     const subscriptionRequest = new SubscriptionRequest();

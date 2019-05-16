@@ -6,9 +6,6 @@ export default class ChatParent extends Vue {
   private created(): void {
     // If the window is closed or reloaded, unsubscribe.
     window.addEventListener("beforeunload", this.onClose);
-
-    // On app creation, connect to the gRPC server.
-    chat.connectClient("http://localhost:8080");
   }
 
   private destroyed(): void {

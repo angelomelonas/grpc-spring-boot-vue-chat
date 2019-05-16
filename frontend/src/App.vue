@@ -21,12 +21,18 @@ import { Component, Vue } from "vue-property-decorator";
 import ChatBox from "@/components/ChatBox.vue";
 import TypeBox from "@/components/TypeBox.vue";
 import ConnectBox from "@/components/ConnectBox.vue";
+import chat from "@/store/modules/chat";
 
 @Component({
   name: "App",
   components: { ConnectBox, ChatBox, TypeBox }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  created(){
+    // On app creation, connect to the gRPC server.
+    chat.connectClient({hostname: "localhost", port: 8000});
+  }
+}
 </script>
 
 <style>
