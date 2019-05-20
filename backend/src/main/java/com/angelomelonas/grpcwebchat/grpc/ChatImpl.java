@@ -84,7 +84,7 @@ public class ChatImpl extends ChatGrpc.ChatImplBase {
             // Store this client's StreamObserver.
             connectedUsers.put(username, responseObserver);
 
-            LOGGER.info("Client with Username {} has subscribed.", request.getUsername());
+            LOGGER.info("Client with Username {} has subscribed.", username);
         }
     }
 

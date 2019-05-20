@@ -21,7 +21,7 @@ Install Docker
 ## Install and Run
 
 ##### gRPC-Web Chat
-Run `mvn clean install` to build and compile the project. This will also generate all the necessary Protocol Buffer files for the backend.
+Run `mvn clean install` to build and compile the project. This will also generate all the necessary Protocol Buffer files for the backend and frontend.
 
 #### Spring Boot Backend
 Simply run the `ChatApplication.java` as a normal Java application. This will start the server. See the `resources/application.properties` file for server details.
@@ -29,48 +29,37 @@ Simply run the `ChatApplication.java` as a normal Java application. This will st
 #### Envoy Proxy
 To build and run the Docker container, follow the instructions below. 
 
-For Windows:
-
+##### Windows
+Execute the following Docker commands to build and run the EnvoyProxy container:
+    
     $ docker build -t helloworld/envoy -f ./envoy.Dockerfile .
     $ docker run -d -p 8080:8080 helloworld/envoy
     
-For Unix:
-
-    $ docker build -t helloworld/envoy -f ./envoy.Dockerfile .
-    $ docker run -d -p 8080:8080 --network=host helloworld/envoy
-    
-#### Note
-This project is configured for Windows by default. To run Envoy on Unix, change the following line in the `envoy.yaml` file 
+##### Unix:
+NOTE: This project is configured for Windows by default. To run Envoy on Unix, change the following line in the `envoy.yaml` file (see [here](https://github.com/grpc/grpc-web/issues/436) for more details):
 
     hosts: [{ socket_address: { address: host.docker.internal, port_value: 9090 }}]
 to 
 
     hosts: [{ socket_address: { address: localhost, port_value: 9090 }}]
 
-See [here](https://github.com/grpc/grpc-web/issues/436) for more details regarding this change.
+Now execute the following Docker commands to build and run the EnvoyProxy container:
 
+    $ docker build -t helloworld/envoy -f ./envoy.Dockerfile .
+    $ docker run -d -p 8080:8080 --network=host helloworld/envoy
+    
 #### Vue Frontend
+To specifically generate Proto files for the front-end client, navigate to the `frontend` directory and run the following command:
+    
+    npm run proto
+    
+To serve the frontend code in a development environment, execute:
 
-// TODO: Generate the proto buffs for the frontend using
+    npm run serve -- --port 8081    # This serves the front end on port 8081. If we do not set the port, the default port of 8080 conflicts with Envoy.
 
-    $ protoc -I=. helloworld.proto \
-      --js_out=import_style=commonjs:. \
-      --grpc-web_out=import_style=commonjs,mode=grpcwebtext:.
-// TODO
 ## References and Resources
-    https://medium.com/@aravindhanjay/a-todo-app-using-grpc-web-and-vue-js-4e0c18461a3e
-    https://www.youtube.com/watch?v=RtyKEDZipsM
-    https://github.com/grpc/grpc-web/issues/347
-    https://grpc.io/blog/grpc-web-ga/
-    https://blog.envoyproxy.io/envoy-and-grpc-web-a-fresh-new-alternative-to-rest-6504ce7eb880
-    https://piotrminkowski.wordpress.com/2017/10/25/envoy-proxy-with-microservices/
-    https://codenotfound.com/grpc-java-example.html
-    https://improbable.io/blog/grpc-web-moving-past-restjson-towards-type-safe-web-apis
-    https://grpc.io/docs/quickstart/java/
-    https://github.com/grpc/grpc-web/issues/436
-    https://developers.google.com/protocol-buffers/docs/proto3
-    https://github.com/rodaine/grpc-chat/blob/master/protos/chat.proto
-    https://github.com/saturnism/grpc-java-by-example
-    https://github.com/grpc/grpc-java/blob/master/examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java
-    https://github.com/gluons/vuex-typescript-example
-    https://medium.com/@koonradstraszewski/using-fully-typed-vuex-mutations-with-vuex-typescript-7597f56eceec
+* [gRPC-Web is Generally Available](https://grpc.io/blog/grpc-web-ga/)
+* [CodeNotFound: gRPC Java Example](https://codenotfound.com/grpc-java-example.html)
+* [gRPC-Web: Moving past REST+JSON towards type-safe Web APIs](https://improbable.io/blog/grpc-web-moving-past-restjson-towards-type-safe-web-apis)
+* [gRPC: Java Quick Start](https://grpc.io/docs/quickstart/java/)
+* [Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3)
