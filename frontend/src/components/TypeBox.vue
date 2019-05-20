@@ -40,17 +40,25 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
-import ChatParent from "@/components/ChatParent.ts";
+import { Component, Vue } from "vue-property-decorator";
+import chat from "@/store/modules/chat";
 
 @Component({
   name: "TypeBox"
 })
-export default class TypeBox extends ChatParent {
+export default class TypeBox extends Vue {
   private message: string = "";
 
   clearMessage(): void {
     this.message = "";
+  }
+
+  sendMessage(message: string): void {
+    chat.sendMessage(message);
+  }
+
+  get isSubscribed(): boolean {
+    return chat.isSubscribed;
   }
 }
 </script>

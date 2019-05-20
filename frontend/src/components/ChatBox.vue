@@ -16,13 +16,17 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
-import ChatParent from "@/components/ChatParent";
+import { Component, Vue } from "vue-property-decorator";
+import chat from "@/store/modules/chat";
 
 @Component({
   name: "ChatBox"
 })
-export default class TypeBox extends ChatParent {}
+export default class TypeBox extends Vue {
+  get messages(): string {
+    return chat.getMessages;
+  }
+}
 </script>
 
 <style></style>

@@ -27,14 +27,4 @@ public class ChatClient {
 
         return response;
     }
-
-    // TODO AM:
-//    public ArrayList<String> getMessages() {
-//        ArrayList<String> messagesList = new ArrayList<>();
-//
-//        Iterator<Message> messages = chatBlockingStub.getMessages(MessagesRequest.newBuilder().build());
-//        messages.forEachRemaining(message -> messagesList.add(message.getMessage()));
-//
-//        return messagesList;
-//    }
 }

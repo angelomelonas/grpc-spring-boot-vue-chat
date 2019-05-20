@@ -28,9 +28,20 @@ import chat from "@/store/modules/chat";
   components: { ConnectBox, ChatBox, TypeBox }
 })
 export default class App extends Vue {
-  created(){
+  private created(): void {
     // On app creation, connect to the gRPC server.
-    chat.connectClient({hostname: "localhost", port: 8000});
+    chat.connectClient({ hostname: "localhost", port: 8080 });
+
+    // If the window is closed or reloaded, unsubscribe.
+    window.addEventListener("beforeunload", this.onClose);
+  }
+
+  private destroyed(): void {
+    chat.unsubscribe();
+  }
+
+  private onClose(): void {
+    chat.unsubscribe();
   }
 }
 </script>

@@ -14,6 +14,7 @@ import {
   UnsubscriptionRequest
 } from "../../../proto/chat_pb";
 import * as grpcWeb from "grpc-web";
+import moment from "moment";
 
 @Module({
   namespaced: true,
@@ -55,7 +56,7 @@ class ChatModule extends VuexModule {
     if (data) {
       this.messages +=
         "[" +
-        new Date(data.getTimestamp()).toISOString() +
+        moment(data.getTimestamp()).format("LTS") +
         "] " +
         data.getUsername() +
         ": " +
@@ -67,20 +68,23 @@ class ChatModule extends VuexModule {
   }
 
   @Action
-  connectClient(payload : {hostname: string, port: number}) {
-    this.chatClient = new ChatClient("http://" + payload.hostname + ":" + payload.port, null, null);
+  connectClient(host: { hostname: string; port: number }) {
+    this.chatClient = new ChatClient(
+      "http://" + host.hostname + ":" + host.port,
+      null,
+      null
+    );
     console.log("Client connected.");
   }
 
   @Action
   subscribe() {
-    console.log("User has subscribed: " + this.username);
-
     const subscriptionRequest = new SubscriptionRequest();
     subscriptionRequest.setUsername(this.username);
 
     this.chatClient.subscribe(subscriptionRequest).on("data", data => {
       if (!data.getMessage().includes("Error")) {
+        console.log("User has subscribed: " + this.username);
         this.setSubscription(true);
       }
       this.appendMessage(data);
@@ -89,6 +93,9 @@ class ChatModule extends VuexModule {
 
   @Action
   unsubscribe() {
+    if (!this.isSubscribed) {
+      return;
+    }
     console.log("User has unsubscribed: " + this.username);
 
     const unsubscriptionRequest = new UnsubscriptionRequest();

@@ -41,13 +41,33 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
-import ChatParent from "@/components/ChatParent";
+import { Component, Vue } from "vue-property-decorator";
+import chat from "@/store/modules/chat";
 
 @Component({
   name: "ConnectBox"
 })
-export default class TypeBox extends ChatParent {}
+export default class TypeBox extends Vue {
+  subscribe(): void {
+    chat.subscribe();
+  }
+
+  unsubscribe(): void {
+    chat.unsubscribe();
+  }
+
+  setUsername(username: string) {
+    chat.setUsername(username);
+  }
+
+  get username(): string {
+    return chat.getUsername;
+  }
+
+  get isSubscribed(): boolean {
+    return chat.isSubscribed;
+  }
+}
 </script>
 
 <style></style>

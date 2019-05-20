@@ -21,22 +21,22 @@ Install Docker
 ## Install and Run
 
 ##### gRPC-Web Chat
-Run `mvn clean install` to build and compile the project. This will also generate all the necessary Protocol Buffer files for the backend and frontend.
+Execute `mvn clean install` to build and compile the project. This will also generate all the necessary Protocol Buffer files for the backend and frontend.
 
 #### Spring Boot Backend
-Simply run the `ChatApplication.java` as a normal Java application. This will start the server. See the `resources/application.properties` file for server details.
+Simply run the `ChatApplication.java` as a normal Java application. This will start the server. See the `resources/application.properties` file for server details. By default it runs on http://localhost:8000.
 
 #### Envoy Proxy
 To build and run the Docker container, follow the instructions below. 
 
-##### Windows
+###### Windows
 Execute the following Docker commands to build and run the EnvoyProxy container:
     
     $ docker build -t helloworld/envoy -f ./envoy.Dockerfile .
     $ docker run -d -p 8080:8080 helloworld/envoy
     
-##### Unix:
-NOTE: This project is configured for Windows by default. To run Envoy on Unix, change the following line in the `envoy.yaml` file (see [here](https://github.com/grpc/grpc-web/issues/436) for more details):
+###### Unix
+Note: This project is configured for Windows by default. To run Envoy on Unix, change the following line in the `envoy.yaml` file (see [here](https://github.com/grpc/grpc-web/issues/436) for more details):
 
     hosts: [{ socket_address: { address: host.docker.internal, port_value: 9090 }}]
 to 
@@ -51,11 +51,11 @@ Now execute the following Docker commands to build and run the EnvoyProxy contai
 #### Vue Frontend
 To specifically generate Proto files for the front-end client, navigate to the `frontend` directory and run the following command:
     
-    npm run proto
+    $ npm run proto
     
 To serve the frontend code in a development environment, execute:
 
-    npm run serve -- --port 8081    # This serves the front end on port 8081. If we do not set the port, the default port of 8080 conflicts with Envoy.
+    $ npm run serve -- --port 8081    # This serves the front end on port 8081.
 
 ## References and Resources
 * [gRPC-Web is Generally Available](https://grpc.io/blog/grpc-web-ga/)

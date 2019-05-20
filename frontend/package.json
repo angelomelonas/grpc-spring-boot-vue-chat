@@ -21,6 +21,7 @@
     "google-protobuf": "^3.6.1",
     "grpc-web": "^1.0.4",
     "material-design-icons-iconfont": "^5.0.1",
+    "moment": "^2.24.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue": "^2.6.10",
